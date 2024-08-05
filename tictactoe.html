@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>tic tac toe</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Borel&family=Caveat&family=Edu+AU+VIC+WA+NT+Hand:wght@400..700&family=Libre+Baskerville&family=Playwrite+AR:wght@100..400&family=Rubik:ital,wght@0,300;0,400;0,500;1,300&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Borel&family=Caveat:wght@400..700&family=Edu+AU+VIC+WA+NT+Hand:wght@400..700&family=Libre+Baskerville&family=Playwrite+AR:wght@100..400&family=Rubik:ital,wght@0,300;0,400;0,500;1,300&display=swap');
+
+*{
+    margin: 0;
+    padding: 0;
+}
+
+nav{
+    background-color: aqua;
+    color: brown;
+    height: 75px;
+    font-size: 27px;
+    font-family: "Playwrite AR", cursive;
+    display: flex;justify-content: center;
+    align-items: center;
+
+}
+
+nav ul{
+    list-style-type: none;
+}
+
+.gamecontainer{
+    height: 70vh;
+    width: 100vw;
+    background-color: bisque;
+    display: flex;
+    justify-content: center;
+    margin-top: 50px;
+}
+
+.container{
+    padding-left: 10vh;
+    padding-top: 10vh;
+    width: 100vw;
+    display: grid;
+    grid-template-columns: repeat(3,10vw);
+    grid-template-rows: repeat(3,10vw);
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+
+    color: chocolate;
+
+}
+.box{
+
+    border: 2px solid black;
+    font-size: 8vw;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.box:hover{
+    background-color: rgb(152, 75, 224);
+}
+.gameinfo{
+    
+    font-family: "Caveat", cursive;
+}
+/* .imgbox{
+    
+    position:relative;
+} */
+
+.imgbox img{
+
+   padding-right: 5vh;
+   height: 0;
+   transition: height 1s ease-in-out;
+}
+#reset{
+    margin: 10px 25px;
+
+    padding: 4px 15px;
+    background: yellowgreen;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+}
+@media screen and (max-width: 800px){
+    .gamecontainer{
+        flex-wrap: wrap;
+    }
+    .container{
+        grid-template-columns: repeat(3,20vw);
+        grid-template-rows: repeat(3,20vw);
+    }
+    .info{
+        color: red;
+        font-size: 30px;
+        font-weight: bold;
+    }
+
+}
+    </style>
+
+</head>
+<body>
+    <nav>
+        <ul>
+            <li>MyTicTacToe.com</li>
+        </ul>
+    </nav>
+    <div class="gamecontainer">
+
+        <div class="container">
+            <div class="box"><span class="boxtext"></span></div>
+            <div class="box"><span class="boxtext"></span></div>
+            <div class="box"><span class="boxtext"></span></div>
+            <div class="box"><span class="boxtext"></span></div>
+            <div class="box"><span class="boxtext"></span></div>
+            <div class="box"><span class="boxtext"></span></div>
+            <div class="box"><span class="boxtext"></span></div>
+            <div class="box"><span class="boxtext"></span></div>
+            <div class="box"><span class="boxtext"><span></div>
+        </div>
+        <div class="gameinfo">
+            <h1>welcome to tic tac toe made by Neyaz</h1>
+            <div class="imgbox">
+                <img src="exicted.gif" alt="">
+            </div>
+            <div>
+                <span class="info">turn for X</span>
+                <button id="reset">Reset</button>
+            </div>
+            
+            
+        </div>
+    </div>
+    <script>
+        console.log("welcome to tic tac toe");
+
+let music = new Audio("ding.mp3")
+let nextturn = new Audio("nextturn.mp3");
+let gameover= new Audio("gameover.mp3");
+
+let turn = "X";
+let isgameover = false;
+
+// function to change turn
+
+const changeTurn = ()=>{
+    return turn === "X"?"0": "X"
+}
+
+// function to check win
+
+const checkWin = ()=>{
+     let boxtext = document.getElementsByClassName('boxtext');
+     let wins = [
+        [0,1,2],
+        [3,4,5],
+        [6,7,8],
+        [0,3,6],
+        [1,4,7],
+        [2,5,8],
+        [0,4,8],
+        [2,4,6],
+     ] 
+
+     wins.forEach((e)=>{
+        if((boxtext[e[0]].innerText === boxtext[e[1]].innerText) && (boxtext[e[2]].innerText === boxtext[e[1]].innerText) && (boxtext[e[0]].innerText !== "")){
+             document.querySelector('.info').innerText = boxtext[e[0]].innerText + " won"
+             isgameover = true;
+             document.querySelector('.imgbox').getElementsByTagName('img')[0].style.height = "20vh"
+        }
+     })
+}
+
+// game logic
+
+let boxes = document.getElementsByClassName("box");
+Array.from(boxes).forEach((element)=>{
+         let boxtext = element.querySelector('.boxtext');
+         element.addEventListener('click',()=>{
+            if(boxtext.innerText === ''){
+                boxtext.innerText = turn;
+                turn = changeTurn();
+                nextturn.play();
+                checkWin();
+                if(!isgameover){
+                    document.getElementsByClassName("info")[0].innerText = "turn for " + turn;
+                }  
+            }
+         })
+})
+
+// add on click listner to reset button 
+reset.addEventListener('click',()=>{
+    let boxtext = document.querySelectorAll('.boxtext');
+    Array.from(boxtext).forEach(element =>{
+        element.innerText = ""
+    });
+    turn = "X";
+    isgameover = false;
+    document.getElementsByClassName("info")[0].innerText = "turn for " + turn;
+    document.querySelector('.imgbox').getElementsByTagName('img')[0].style.height = "0"
+})
+    </script>
+</body>
+</html>
